@@ -17,8 +17,8 @@ import java.util.UUID;
 @Table(name = "apartments")
 public class Apartment {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.UUID)
+    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "number" ,nullable = false)
@@ -30,19 +30,19 @@ public class Apartment {
     @Column(name = "pets_count", nullable = false)
     private Integer petsCount;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private Person owner;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "apartment_residents",
-            joinColumns = @JoinColumn(name = "apartment_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "person_id", nullable = false)
+            joinColumns = @JoinColumn(name = "apartment_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id")
     )
     private List<Person> residents;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 }

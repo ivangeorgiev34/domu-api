@@ -17,13 +17,17 @@ import java.util.UUID;
 @Table(name = "floors")
 public class Floor {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.UUID)
+    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "number", length = 500, nullable = false)
     private Integer number;
 
-    @OneToMany(mappedBy = "floor", fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "building_id", nullable = false)
+    private Building building;
+
+    @OneToMany(mappedBy = "floor")
     private List<Apartment> apartments;
 }

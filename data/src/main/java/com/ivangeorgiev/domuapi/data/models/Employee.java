@@ -1,8 +1,10 @@
 package com.ivangeorgiev.domuapi.data.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -15,8 +17,8 @@ import java.util.UUID;
 @Table(name = "employees")
 public class Employee {
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.UUID)
+    @Column(columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "first_name", nullable = false, length = 100)
@@ -25,10 +27,10 @@ public class Employee {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.EAGER)
-    private Building building;
+    @OneToMany(mappedBy = "employee")
+    private List<Building> buildings;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 }

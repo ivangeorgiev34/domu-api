@@ -18,8 +18,8 @@ import java.util.UUID;
 @Table(name = "buildings")
 public class Building {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.UUID)
+    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "address", length = 500, nullable = false)
@@ -28,9 +28,14 @@ public class Building {
     @Column(name = "area", precision = 10, scale = 2, nullable = false)
     private BigDecimal area;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "building")
     private List<Floor> floors;
 
-    @OneToOne(mappedBy = "employee", optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

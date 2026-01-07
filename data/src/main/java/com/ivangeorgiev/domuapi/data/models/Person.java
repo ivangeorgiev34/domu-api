@@ -16,8 +16,8 @@ import java.util.UUID;
 @Table(name = "people")
 public class Person {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.UUID)
+    @Column(name = "id", columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "first_name", nullable = false)
@@ -32,9 +32,9 @@ public class Person {
     @Column(name = "uses_elevator", nullable = false)
     private Boolean usesElevator;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
     private List<Apartment> ownedApartments;
 
-    @ManyToMany(mappedBy = "residents", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "residents")
     private List<Apartment> residentApartments;
 }
